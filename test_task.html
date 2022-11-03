@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(250, 251, 255);
+            font-family: 'Andale Mono', sans-serif, bold;
+        }
+        #leftblock {
+            display: inline-block;
+            width: 24%;
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        #rightblock {
+            display: inline-block;
+            width: 75%;
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
+        #generalblock {margin: 4% 9% 5% 6%;}
+        #fixedleftmenu {
+            left: 0;
+            top: 0;
+            width: 24%;
+            bottom: 0;
+            position: fixed;
+            background-color: white;
+        }
+        #fixedleftmenu * {max-width: 100%;}
+        #version {
+            font-size: 9px;
+            color: gray;
+        }
+        #sitename {
+            padding: 27px 10% 40px;
+            vertical-align: middle;
+            height: 5%;
+        }
+        #sitename #sitename-text {font-size: 20px;}
+        #sitename div {
+            display: inline-block;
+            transform: translateY(-6px);
+        }
+        #leftbuttons-block {
+            height: 70%;
+            padding: 0 20px;
+        }
+        .leftbuttons {
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 0;
+            width: 100%;
+            background-color: white;
+            vertical-align: middle;
+            text-align: left;
+        }
+        .leftbuttons:hover {outline: 1px solid rgb(145, 151, 179);}
+        .leftbuttons:focus {background-color:rgb(86, 50, 234);}
+        .leftbuttons:focus div {color: white;}
+
+        .leftbuttons #Dashboard {content: url("icons/Dashboard.png");}
+        .leftbuttons #Product {content: url("icons/Product.png");}
+        .leftbuttons #Customers {content: url("icons/Customers.png");}
+        .leftbuttons #Income {content: url("icons/Income.png");}
+        .leftbuttons #Promote {content: url("icons/Promote.png");}
+        .leftbuttons #Help {content: url("icons/Help.png");}
+
+        .leftbuttons:focus #Dashboard {content: url("icons/Dashboard_after.png");}
+        .leftbuttons:focus #Product {content: url("icons/Product_after.png");}
+        .leftbuttons:focus #Customers {content: url("icons/Customers_after.png");}
+        .leftbuttons:focus #Income {content: url("icons/Income_after.png");}
+        .leftbuttons:focus #Promote {content: url("icons/Promote_after.png");}
+        .leftbuttons:focus #Help {content: url("icons/Help_after.png");}
+
+        .leftbuttons img {
+            width: 18px;
+            margin: 5px;
+        }
+
+        .leftbuttons div {
+            display: inline-block;
+            transform: translateY(-9px);
+            color: rgb(145, 151, 179);
+            font-family: Verdana, Monaco, sans-serif;
+            font-size: 12px;
+        }
+        .leftbuttons .text {width: 50%;max-width: 65%;}
+        .arrow {
+            border: solid rgb(145, 151, 179);
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(-45deg);
+        }
+        #frontarrow {
+            border: solid black;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(-45deg);
+        }
+        #backarrow {
+            border: solid black;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(135deg);
+        }
+        .leftbuttons:focus .arrow {border: solid white; border-width: 0 2px 2px 0;}
+        #author {
+            height: 20%; 
+            padding: 5% 10% 17%;
+        }
+        #author #photo {
+            display: inline-block;
+            width: 17%;
+            transform: translateY(-20%);
+            height: auto;
+        }
+        #author #photo img {
+            content: url("icons/photo.png");
+            width: 100%;
+        }
+        #author .text {
+            max-width: 60%;
+            display: inline-block;
+            color:black;
+        }
+        
+        #author .sidetext .initials {
+            text-align: left;
+            display: flex;
+            font-size: 80%;
+        }
+        #author .sidetext #profesion {
+            font-size: 70%;
+            color:gray;
+        }
+        #author .sidetext {
+            display:inline-block; 
+            vertical-align: middle;
+            text-align: center;
+            transform: translateY(-19px);
+        }
+        #titletext {font-size: 19px;}
+        #workspace {
+            background-color: white;
+            margin-top: 7%;
+            border-radius: 30px;
+        }
+        #titlecontainer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 30px;
+            padding-bottom: 10px;
+            width: calc(100%-60px);
+        }
+        #titlecontainer #left {
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        #titlecontainer #right {
+            grid-column-start: 4;
+            grid-column-end: 5;
+            vertical-align:middle;
+        }
+        #titlecontainer #left #toptext {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        #titlecontainer #left #bottomtext {
+            font-size: 14px;
+            color: gray;
+        }
+        #searchbutton {
+            outline: 0;
+            background-color: none;
+            opacity: 0.5;
+            content: url("icons/free-icon-magnifying-glass-126474.png");
+            width: 13px;
+            margin: 2px;
+            left: 76%;
+            position: absolute;
+            margin-top: 11px;
+        }
+        input[name="search"] {
+            border-radius: 5px;
+            padding: 4px;
+            padding-left: 15%;
+            width: 75%;
+            margin-top: 8px;
+            font-size: 10px;
+            border: none;
+            background-color: rgb(250, 251, 255);;
+        }
+        .active {
+            border: none;
+            outline: 2px solid rgb(0, 135, 103);
+            color: rgb(0, 135, 103);
+            background-color: rgb(166, 231, 216);
+            border-radius: 5px;
+            width: 100%;
+            height: 80%;
+        }
+        .inactive {
+            border: none;
+            outline: 2px solid rgb(233, 4, 4);
+            color: rgb(233, 4, 4);
+            background-color: rgb(255, 197, 197);
+            border-radius: 5px;
+            width: 100%;
+            height: 80%;
+        }
+        table#customertable {
+            font-size: 70%;
+            width: 94%;
+            margin: 3%;
+            border-collapse: collapse;
+        }
+        table#customertable thead, table#customertable td {padding: 13px 16px 13px 0;}
+        table#customertable tr {border-bottom: 1px solid silver; margin: 0 -300px;}
+        table#customertable th {color: silver; text-align: left;}
+        table#customertable tbody:before {display: block; margin: 30px;}
+        #bottommenu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 0 30px 40px;
+            width: calc(100%-60px);
+        }
+        #bottommenu #left {
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        #bottommenu #left div {
+            color: gray;
+            font-size: 70%;
+        }
+        #bottommenu #right {
+            grid-column-start: 3;
+            grid-column-end: 4;
+            vertical-align:middle;
+        }
+        .flex-container {
+            display: flex;
+            flex-wrap: nowrap;
+            line-height: 20px;
+            font-size: 13px;
+        }
+
+        .flex-container button {
+            background-color: #f1f1f1;
+            text-align: center;
+            font-size: 13px;
+            width: 20px;
+            line-height: 20px;
+            vertical-align: middle;
+            margin: 0 5px;
+            border-radius: 3px;
+            border: none;
+        }
+        .flex-container button:hover {outline: 1px solid gray;}
+        .flex-container button#selected {
+            background-color: rgb(86, 50, 234);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Поділ на ліве фіксоване і праве загальне меню -->
+    <div id="leftblock">
+        <div id="fixedleftmenu">
+            <!-- Титулка сайту -->
+            <div id="sitename">
+                <img src="logo.png" width="25px">
+                <div>
+                    <span id="sitename-text"><b>Dashboard</b></span>
+                    <span id="version">v.01</span>
+                </div>
+            </div>
+
+            <!-- Кнопки на боковому меню -->
+            <div id="leftbuttons-block">
+                <button class="leftbuttons">
+                    <img id="Dashboard">
+                    <div class="text">Dashboard</div>
+                </button>
+                <button class="leftbuttons">
+                    <img id="Product">
+                    <div class="text">Product</div>
+                    <div><i class="arrow"></i></div>
+                </button>
+                <button class="leftbuttons">
+                    <img id="Customers">
+                    <div class="text">Customers</div>
+                    <div><i class="arrow"></i></div>
+                </button>
+                <button class="leftbuttons">
+                    <img id="Income">
+                    <div class="text">Income</div>
+                    <div><i class="arrow"></i></div>
+                </button>
+                <button class="leftbuttons">
+                    <img id="Promote">
+                    <div class="text">Promote</div>
+                    <div><i class="arrow"></i></div>
+                </button>
+                <button class="leftbuttons">
+                    <img id="Help">
+                    <div class="text">Help</div>
+                    <div><i class="arrow"></i></div>
+                </button>
+            </div>
+
+            <!-- Власник проекту -->
+                <div id="author">
+                    <div id="photo"><img></div>
+                    <div class="sidetext">
+                        <div class="initials">Evano</div>
+                        <div class="initials" id="profesion">Project Manager</div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+
+    <div id="rightblock">
+        <div id="generalblock">
+            <span id="titletext">Hello Evano 👋🏼,</span>
+
+            <div id="workspace">
+                <!-- Титулка робочої області -->
+                <div id="titlecontainer">
+                    <div id="left">
+                        <div id="toptext">All Customers</div>
+                        <div id="bottomtext">Active Members</div>
+                    </div>
+                    <div id="right">
+                        <input name="search" placeholder="search">
+                        <input type="image" id="searchbutton">
+                    </div>
+                </div>
+
+                <!-- Таблиця користувачів -->
+                <table id="customertable">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Company</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Country</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jane Cooper</td>
+                            <td>Microsoft</td>
+                            <td>(225) 555-0118</td>
+                            <td>jane@microsoft.com</td>
+                            <td>United States</td>
+                            <td><button class="active">Active</button></td>
+                        </tr>
+                        <tr>
+                            <td>Floyd Milesr</td>
+                            <td>Yahoo</td>
+                            <td>(205) 555-0100</td>
+                            <td>floyd@yahoo.com</td>
+                            <td>Kiribati</td>
+                            <td><button class="inactive">Inactive</button></td>
+                        </tr>
+                        <tr>
+                            <td>Ronald Richards</td>
+                            <td>Adobe</td>
+                            <td>(302) 555-0107</td>
+                            <td>ronald@adobe.com</td>
+                            <td>Israel</td>
+                            <td><button class="inactive">Inactive</button></td>
+                        </tr>
+                        <tr>
+                            <td>Marvin McKinney</td>
+                            <td>Tesla</td>
+                            <td>(252) 555-0126</td>
+                            <td>marvin@tesla.com</td>
+                            <td>Iran</td>
+                            <td><button class="active">Active</button></td>
+                        </tr>
+                        <tr>
+                            <td>Jerome Bell</td>
+                            <td>Google</td>
+                            <td>(629) 555-0129</td>
+                            <td>jerome@google.com</td>
+                            <td>Réunion</td>
+                            <td><button class="active">Active</button></td>
+                        </tr>
+                        <tr>
+                            <td>Kathryn Murphy</td>
+                            <td>Microsoft</td>
+                            <td>(406) 555-0120</td>
+                            <td>kathryn@microsoft.com</td>
+                            <td>Curaçao</td>
+                            <td><button class="active">Active</button></td>
+                        </tr>
+                        <tr>
+                            <td>Jacob Jones</td>
+                            <td>Yahoo</td>
+                            <td>(208) 555-0112</td>
+                            <td>jacob@yahoo.com</td>
+                            <td>Brazil</td>
+                            <td><button class="active">Active</button></td>
+                        </tr>
+                        <tr>
+                            <td>Kristin Watson</td>
+                            <td>Facebook</td>
+                            <td>(704) 555-0127</td>
+                            <td>kristin@facebook.com</td>
+                            <td>Åland Islands</td>
+                            <td><button class="inactive">Inactive</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Нижнє меню -->
+                <div id="bottommenu">
+                    <div id="left"><div>Showing data 1 to 8 of  256K entries</div></div>
+                    <div id="right">
+                        <div class="flex-container">
+                            <button><i id="backarrow"></i></button>
+                            <button id="selected">1</button>
+                            <button>2</button>
+                            <button>3</button>  
+                            <button>4</button>
+                            ...
+                            <button>40</button>
+                            <button><i id="frontarrow"></i></button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
